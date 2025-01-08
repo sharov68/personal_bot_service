@@ -1,0 +1,11 @@
+[Unit]
+Description=personal_bot_service Service
+After=network.target mongod.service
+
+[Service]
+User=ubuntu
+Restart=always
+ExecStart=/bin/bash -c ". ~/.nvm/nvm.sh; nvm use v22; cd ~/services/personal_bot_service/;exec node app.js"
+
+[Install]
+WantedBy=multi-user.target

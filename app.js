@@ -16,6 +16,19 @@ mongoose.connect(MONGO_URI, {})
 const TelegramBot = require('node-telegram-bot-api');
 const token = cfg.apiKey;
 const bot = new TelegramBot(token, { polling:true });
+// Установка команд
+bot.setMyCommands([
+	{ command: '/start', description: 'Начать общение с ботом' },
+	{ command: '/help', description: 'Получить помощь' },
+	{ command: '/status', description: 'Узнать статус системы' }
+]);
+bot.onText(/\/help/, msg => {
+	const chatId = msg.chat.id;
+	bot.sendMessage(chatId, 'Я бот Алексея. Вот список того, что я могу:\n\n' +
+		'/start - Начать общение со мной\n' +
+		'/help - Получить помощь\n' +
+		'/status - Узнать статус системы');
+});
 bot.onText(/\/start/, msg => {
 	const chatId = msg.chat.id;
 	const menuKeyboard = {

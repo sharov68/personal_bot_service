@@ -18,11 +18,25 @@ const token = cfg.apiKey;
 const bot = new TelegramBot(token, { polling:true });
 bot.onText(/\/start/, msg => {
 	const chatId = msg.chat.id;
-	bot.sendMessage(chatId, 'Привет! Я бот Алексея! Я служу только для обратной связи.');
+	const menuKeyboard = {
+		reply_markup: {
+			keyboard: [
+				[{ text: "Menu" }] // Кнопка "Menu"
+			],
+			resize_keyboard: true, // Делает клавиатуру компактной
+			one_time_keyboard: true // Скрывает клавиатуру после нажатия
+		}
+	};
+	bot.sendMessage(chatId, 'Привет! Я бот Алексея! Я служу только для обратной связи.', menuKeyboard);
 });
 bot.on('message', async msg => {
 	console.log("Входящее сообщение:", msg);
 	const chatId = msg.chat.id;
+	// Проверяем, что пользователь нажал "Menu"
+	if (msg.text === "Menu") {
+		bot.sendMessage(chatId, "Вы нажали 'Menu'. Чем я могу помочь?");
+		return;
+	}
 	if (msg.text !== '/start') {
 		if (chatId == cfg.adminChatId) {
 			const count = await Messages.countDocuments();
